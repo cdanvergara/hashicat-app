@@ -140,12 +140,6 @@ resource "azurerm_linux_virtual_machine" "catapp" {
   depends_on = [azurerm_network_interface_security_group_association.catapp-nic-sg-ass]
 }
 
-module "azure-backup" {
-  source              = "ravensorb/azure-backup/azurerm"
-  version             = "1.0.2"
-  resource_group_name = "${var.prefix}-public"
-}
-
 # We're using a little trick here so we can run the provisioner without
 # destroying the VM. Do not do this in production.
 
@@ -206,5 +200,10 @@ resource "null_resource" "configure-cat-app" {
       host     = azurerm_public_ip.catapp-pip.fqdn
     }
   }
+}
 
+module "azure-backup" {
+  source              = "ravensorb/azure-backup/azurerm"
+  version             = "1.0.2"
+  resource_group_name = "${var.prefix}-public"
 }
